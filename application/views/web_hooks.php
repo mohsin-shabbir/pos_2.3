@@ -2,7 +2,7 @@
 <div id="web-hooks">
 <div id="page_title"><?php echo $this->lang->line('module_web_hooks'); ?></div>
 <?php
-echo form_open('config/save_web_hooks/',array('id'=>'config_web_hooks_form'));
+echo form_open('web_hooks/save_web_hooks/',array('id'=>'config_web_hooks_form'));
 ?>
 <div id="config_wrapper">
 <fieldset id="config_info">
@@ -13,12 +13,18 @@ echo form_open('config/save_web_hooks/',array('id'=>'config_web_hooks_form'));
 <div style="color:#006600; font-weight:bold; text-align:center"><?php if(isset($msg)  && $msg != ''){ echo $msg;}  ?></div>
 <div class="field_row clearfix">	
 <?php echo form_label($this->lang->line('web_hooks_callout').':', 'callout',array('class'=>'wide required')); ?>
-	<div class='form_field'>
-	<?php echo form_input(array(
-		'name'=>'callout',
-		'id'=>'callout',
-		'value'=>$this->config->item('callout')));?>
+<div class='form_field'>
+	<div style="width:20%; float:left;">
+		<div style="width:50%; float:left">
+			<input type="radio" style=" display:inline" name="callout" value="1" <?php if(set_value('callout') == 1){ echo 'checked'; } ?> />
+		</div><div style="float:right; width:50%;"> Yes</div>
 	</div>
+	<div style="width:80%; float:right; text-align:left">
+		<div style="width:10%; float:left; text-align:left">
+			<input type="radio" name="callout" value="0" <?php if(set_value('callout') == 0){ echo 'checked'; } ?> />
+		</div><div style="float:right; width:90%; text-align:left;"> No</div>		
+	</div>	
+</div>
 </div>
 
 <div class="field_row clearfix">	
@@ -27,7 +33,8 @@ echo form_open('config/save_web_hooks/',array('id'=>'config_web_hooks_form'));
 	<?php echo form_input(array(
 		'name'=>'url',
 		'id'=>'url',
-		'value'=>$this->config->item('url')));?>
+		'value'=>set_value('url')));
+		?>
 	</div>
 </div>
 <div class="field_row clearfix">	
@@ -36,18 +43,25 @@ echo form_open('config/save_web_hooks/',array('id'=>'config_web_hooks_form'));
 	<?php echo form_input(array(
 		'name'=>'error_email',
 		'id'=>'error_email',
-		'value'=>$this->config->item('error_email')));?>
+		'value'=>set_value('error_email')));?>
 	</div>
 </div>
 
 <div class="field_row clearfix">	
 <?php echo form_label($this->lang->line('web_hooks_is_secure').':', 'error_email',array('class'=>'wide required')); ?>
 	<div class='form_field'>
-	<?php echo form_input(array(
-		'name'=>'is_secure',
-		'id'=>'is_secure',
-		'value'=>$this->config->item('is_secure')));?>
+	<div style="width:20%; float:left;">
+		<div style="width:50%; float:left">
+			<input type="radio" style=" display:inline" name="is_secure" value="1" <?php if(set_value('is_secure') == 1){ echo 'checked'; } ?> />
+		</div><div style="float:right; width:50%;"> Yes</div>
 	</div>
+	<div style="width:80%; float:right; text-align:left">
+		<div style="width:10%; float:left; text-align:left">
+			<input type="radio" name="is_secure" value="0" <?php if(set_value('is_secure') == 0){ echo 'checked'; } ?> />
+		</div><div style="float:right; width:90%; text-align:left;"> No</div>		
+	</div>	
+</div>
+	
 </div>
 
 <div class="field_row clearfix">	
@@ -56,7 +70,7 @@ echo form_open('config/save_web_hooks/',array('id'=>'config_web_hooks_form'));
 	<?php echo form_input(array(
 		'name'=>'authorization_token',
 		'id'=>'authorization_token',
-		'value'=>$this->config->item('authorization_token')));?>
+		'value'=>set_value('authorization_token')));?>
 	</div>
 </div>
 
@@ -66,7 +80,7 @@ echo form_open('config/save_web_hooks/',array('id'=>'config_web_hooks_form'));
 	<?php echo form_input(array(
 		'name'=>'authorization_username',
 		'id'=>'authorization_username',
-		'value'=>$this->config->item('authorization_username')));?>
+		'value'=>set_value('authorization_username')));?>
 	</div>
 </div>
 
@@ -76,7 +90,7 @@ echo form_open('config/save_web_hooks/',array('id'=>'config_web_hooks_form'));
 	<?php echo form_input(array(
 		'name'=>'authorization_password',
 		'id'=>'authorization_password',
-		'value'=>$this->config->item('authorization_password')));?>
+		'value'=>set_value('authorization_password')));?>
 	</div>
 </div>
 <?php 
@@ -93,64 +107,6 @@ echo form_submit(array(
 echo form_close();
 ?>
 <div id="feedback_bar"></div>
-<script type='text/javascript'>
 
-//validation and submit handling
-$(document).ready(function()
-{
-	$('#config_form').validate({
-		submitHandler:function(form)
-		{
-			$(form).ajaxSubmit({
-			success:function(response)
-			{
-				if(response.success)
-				{
-					set_feedback(response.message,'success_message',false);		
-				}
-				else
-				{
-					set_feedback(response.message,'error_message',true);		
-				}
-			},
-			dataType:'json'
-		});
-
-		},
-		errorLabelContainer: "#error_message_box",
- 		wrapper: "li",
-		rules: 
-		{
-			company: "required",
-			address: "required",
-    		phone: "required",
-    		default_tax_rate:
-    		{
-    			required:true,
-    			number:true
-    		},
-    		email:"email",
-    		return_policy: "required",
-    		stock_location:"required"
-    	 		
-   		},
-		messages: 
-		{
-     		company: "<?php echo $this->lang->line('config_company_required'); ?>",
-     		address: "<?php echo $this->lang->line('config_address_required'); ?>",
-     		phone: "<?php echo $this->lang->line('config_phone_required'); ?>",
-     		default_tax_rate:
-    		{
-    			required:"<?php echo $this->lang->line('config_default_tax_rate_required'); ?>",
-    			number:"<?php echo $this->lang->line('config_default_tax_rate_number'); ?>"
-    		},
-     		email: "<?php echo $this->lang->line('common_email_invalid_format'); ?>",
-     		return_policy:"<?php echo $this->lang->line('config_return_policy_required'); ?>",
-     		stock_location:"<?php echo $this->lang->line('config_stock_location_required'); ?>"         
-	
-		}
-	});
-});
-</script>
 </div>
 <?php $this->load->view("partial/footer"); ?>

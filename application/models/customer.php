@@ -272,6 +272,17 @@ class Customer extends Person
 		return $this->db->get();	
 	}
 	
+	function search_log_date($toDate , $fromDate )
+	{
+		$to = date("Y-m-d", strtotime($toDate));
+		$from = date("Y-m-d", strtotime($fromDate));
+		$this->db->from('tbl_logs');
+		$this->db->join('people','tbl_logs.employee_id = people.person_id');		
+		$this->db->where("action_time BETWEEN '".$to."' AND  '".$from."' and status=1");		
+		$this->db->order_by("log_id", "asc");		
+		return $this->db->get();	
+	}
+	
 	
 	
 	function get_search_log_suggestions($search,$limit=25)

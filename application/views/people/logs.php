@@ -54,6 +54,34 @@ function post_person_form_submit(response)
 		}
 	}
 }
+
+function searchResutl()
+{
+	var toDate = $("#toDate").val();
+	var fromDate = $("#fromDate").val();
+
+	//if(new Date(toDate) <= new Date(fromDate))
+	if(toDate <= fromDate)
+	{
+		$.ajax({
+		  method: "POST",
+		  url: "http://localhost/salman/pos_2.3/index.php/logs/search_date",
+		  data: { toDate: toDate, fromDate: fromDate },
+            success: function(data) {
+                $("#sortable_table > tbody").html("");
+				 $("#sortable_table > tbody").html(data);
+            },
+            error: function(data) {
+               alert("Sorry we can't fetch data.");
+            },
+		});
+	}
+	else
+	{
+		alert("To date should be less than from date");
+		return false;
+	}
+}
 </script>
 
 <div id="title_bar">
@@ -62,8 +90,14 @@ function post_person_form_submit(response)
 <?php echo $this->pagination->create_links();?>
 <div id="table_action_header">
 	<ul>
-		<li class="float_left"><span><?php //echo anchor("$controller_name/delete",$this->lang->line("common_delete"),array('id'=>'delete')); ?></span></li>
-		<li class="float_left"></li>
+		<li class="float_left">
+			<input name ='toDate' id='toDate'  class="datepicker-example1" type="text" onchange="searchResutl()" />
+			<button class="Zebra_DatePicker_Icon Zebra_DatePicker_Icon_Inside_Right" type="button" style="top: 3.5px; right: 0px;">Pick a date</button>
+		</li>
+		<li class="float_left">
+			<input name ='fromDate' id='fromDate'  class="datepicker-example1" type="text" onchange="searchResutl()" />
+			<button class="Zebra_DatePicker_Icon Zebra_DatePicker_Icon_Inside_Right" type="button" style="top: 3.5px; right: 0px;">Pick a date</button>
+		
 		<li class="float_right">
 		<img src='<?php echo base_url()?>images/spinner_small.gif' alt='spinner' id='spinner' />
 		<?php echo form_open("logs/search",array('id'=>'search_form')); ?>
@@ -76,4 +110,22 @@ function post_person_form_submit(response)
 <?php echo $manage_table; ?>
 </div>
 <div id="feedback_bar"></div>
+<link rel="stylesheet" rev="stylesheet" href="<?php echo base_url();?>css/zebra-date-picker.css" />
+<script src="<?php echo base_url();?>js/zebra_datepicker.js" type="text/javascript" language="javascript" charset="UTF-8"></script>	
+
+<script type="text/javascript">
+		$(document).ready(function() {
+   			 $('.datepicker-example1').Zebra_DatePicker();
+			 });
+	</script>
 <?php $this->load->view("partial/footer"); ?>
+
+<?php /*?> <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+ <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+  <script>
+  $(function() {
+    $( ".datepicker" ).datepicker();
+  });
+  </script><?php */?>
+   		

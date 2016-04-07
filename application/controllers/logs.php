@@ -31,6 +31,15 @@ class Logs extends Person_controller
 		echo $data_rows;
 	}
 	
+	function search_date()
+	{
+		$todate = $_REQUEST['toDate'];
+		$fromDate = $_REQUEST['fromDate'];
+	
+		$data_rows= get_log_manage_table_data_rows($this->Customer->search_log_date($todate , $fromDate),$this);
+		echo $data_rows;
+	}
+	
 	/*
 	Gives search suggestions based on what is being searched for
 	*/

@@ -19,14 +19,24 @@ class Curl_receiver extends CI_Controller
 		if($this->authentiate_user($headerInfo))
 		{
 			$postData = json_decode($postdata1, true);
+			$sender_id = $headerInfo['sender_id'];
 			$servicePath = $postData['path'];
+			$insertSendingData = array(
+			   "receiver_id" => $sender_id,
+			   "data" => json_encode($postData),
+			   "curl_status" => 2,
+			   "curl_timestamp" => date('Y-m-d H:i:s'),
+			   "status" => 1,
+			   "curl_type" => 2
+		   );
+		   $this->db->insert('curl_log' , $insertSendingData);
 
 			switch($servicePath)
 				{
 					case 'addReceivedAmount':
 						  $this->addReceivedAmount($postData);
 					break;
-									
+														
 					default:
 							$response = array();
 							$response['customMessage'] = 'Action not found';

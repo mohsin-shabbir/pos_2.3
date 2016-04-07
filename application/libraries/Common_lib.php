@@ -21,6 +21,36 @@ class Common_lib extends CI_Model
 		$log_id = $this->db->insert_id();
 	}
 	
+	function sendEmail($fromEmail , $fromName , $toEmail , $cc = "" , $bccEmail = "" , $subject , $message)
+	{
+		$ci = get_instance();
+		$ci->load->library('email');
+		$config['protocol'] = "smtp";
+		$config['smtp_host'] = "ssl://smtp.gmail.com";
+		$config['smtp_port'] = "465";
+		$config['smtp_user'] = "link2mohsin22@gmail.com"; 
+		$config['smtp_pass'] = "ph6362968!@";
+		$config['charset'] = "utf-8";
+		$config['mailtype'] = "html";
+		$config['newline'] = "\r\n";
+		$ci->email->initialize($config);
+		
+		$this->email->from($fromEmail , $fromName );
+		$this->email->to($toEmail); 
+		$this->email->cc($cc); 
+		$this->email->bcc($bccEmail); 
+		$this->email->subject($subject );
+		$this->email->message($message);	
+		if($this->email->send())
+		{
+			return "Email sends successfully.";
+		}
+		else
+		{
+			return "Sorry, We cannot send your email.";
+		}
+	}
+	
 	function sendToThirdParty($json)
 	{
 			
@@ -39,8 +69,10 @@ class Common_lib extends CI_Model
 			   "data" => json_encode($json),
 			   "curl_status" => 0,
 			   "curl_timestamp" => date('Y-m-d H:i:s'),
-			   "status" => 1
+			   "status" => 1,
+			   "curl_type" => 1
 		   );
+		   $errorEmail = $row['error_email'];
 		   $this->db->insert('curl_log' , $insertSendingData);
 		   $curl_id = $this->db->insert_id();
 		   $headers = array();
@@ -77,9 +109,31 @@ class Common_lib extends CI_Model
 				}
 				else
 				{
+					$message = '
+							<html>
+								<head>
+									<title>Failed Curl</title>
+								</head>
+								<body>
+								<p>Sorry we are fail to send your curl reques, below are curl details.</p>
+								<table>
+									<tr>
+										<td>Curl Id</td>
+										<td>'.$curl_id.'</td>
+									</tr>
+									<tr>
+										<td>Request Time</td>
+										<td>'.date('Y-m-d H:i:s').'</td>
+									</tr>
+															
+								</table>
+								</body>
+							</html>';
+					$this->sendEmail("link2mohsin22@yahoo.com" , "Tousef Ahmad" , "link2mohsin22@gmail.com" , "" , "" , "Test Message" , $message );
 					$code = 9;
 					$message = "Sorry! we cannot send your code.";
 					$status = false;
+					
 				}
 				$response = array();
 				$response['code'] = $code;

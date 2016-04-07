@@ -65,7 +65,7 @@ function get_log_manage_table_data_rows($people,$controller)
 	
 	if($people->num_rows()==0)
 	{
-		$table_data_rows.="<tr><td colspan='6'><div class='warning_message' style='padding:7px;'>".$CI->lang->line('common_no_persons_to_display')."</div></td></tr>";
+		$table_data_rows.="<tr><td colspan='6'><div class='warning_message' style='padding:7px;'>".$CI->lang->line('common_no_log_to_display')."</div></td></tr>";
 	}
 	
 	return $table_data_rows;
