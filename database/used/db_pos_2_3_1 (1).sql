@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 24, 2016 at 08:05 PM
+-- Generation Time: Apr 17, 2016 at 01:29 PM
 -- Server version: 5.6.24
 -- PHP Version: 5.6.8
 
@@ -19,20 +19,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `db_pos_2.3.1`
 --
-
--- --------------------------------------------------------
-
---
--- Table structure for table `keys`
---
-
-CREATE TABLE IF NOT EXISTS `keys` (
-  `id` int(11) NOT NULL,
-  `key` varchar(40) NOT NULL,
-  `level` int(2) NOT NULL,
-  `ignore_limits` tinyint(1) NOT NULL DEFAULT '0',
-  `date_created` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -72,23 +58,25 @@ INSERT INTO `ospos_app_config` (`key`, `value`) VALUES
 CREATE TABLE IF NOT EXISTS `ospos_curl_log` (
   `curl_id` int(11) NOT NULL,
   `receiver_id` int(11) NOT NULL,
-  `data` text NOT NULL,
+  `data` varchar(255) NOT NULL,
   `curl_status` tinyint(4) NOT NULL,
   `curl_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `curl_type` int(11) NOT NULL,
   `status` tinyint(4) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=83 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `ospos_curl_log`
 --
 
 INSERT INTO `ospos_curl_log` (`curl_id`, `receiver_id`, `data`, `curl_status`, `curl_timestamp`, `curl_type`, `status`) VALUES
-(78, 3, '{"path":"insertPayment","customer_id":"33","person_data":{"first_name":"curl","last_name":"customer","email":"curl@gmail.com","phone_number":"923009894706","address_1":"address1","address_2":"address2","city":"lhr","state":"pu","zip":"12345","country":"pak","comments":"ccc"},"customer_data":{"account_number":"10005","taxable":1}}', 0, '2016-04-24 02:49:35', 1, 1),
-(79, 3, '{"path":"insertPayment","customer_id":"33","person_data":{"first_name":"curl","last_name":"customer","email":"curl@gmail.com","phone_number":"923009894706","address_1":"address1","address_2":"address2","city":"lhr","state":"pu","zip":"12345","country":"pak","comments":"ccc"},"customer_data":{"account_number":"10005","taxable":1}}', 1, '2016-04-24 11:51:38', 1, 1),
-(80, 3, '{"path":"insertPayment","customer_id":"27","person_data":{"first_name":"zaheer","last_name":"ahmad","email":"","phone_number":"","address_1":"","address_2":"","city":"","state":"","zip":"","country":"","comments":""},"customer_data":{"account_number":null,"taxable":1}}', 1, '2016-04-24 11:55:06', 1, 1),
-(81, 3, '{"path":"insertPayment","customer_id":"27","person_data":{"first_name":"zaheer","last_name":"ahmad","email":"","phone_number":"","address_1":"","address_2":"","city":"","state":"","zip":"","country":"","comments":""},"customer_data":{"account_number":null,"taxable":1}}', 1, '2016-04-24 11:58:08', 1, 1),
-(82, 3, '["6"]', 1, '2016-04-24 15:07:57', 1, 1);
+(1, 3, '{"sale_id":"6","payment_type":"Received Payment","payment_amount":"1","is_received":1,"path":"insertPayment","updated_amount":16}', 0, '2016-04-05 11:38:18', 0, 1),
+(2, 3, '{"sale_id":"6","payment_type":"Received Payment","payment_amount":"1","is_received":1,"path":"insertPayment","updated_amount":21}', 0, '2016-04-05 12:37:14', 0, 1),
+(3, 4, '{"sale_id":"6","payment_type":"Received Payment","payment_amount":"1","is_received":1,"path":"insertPayment","updated_amount":22}', 0, '2016-04-05 12:38:48', 0, 1),
+(4, 4, '{"sale_id":"6","payment_type":"Received Payment","payment_amount":"1","is_received":1,"path":"insertPayment","updated_amount":23}', 0, '2016-04-05 12:39:13', 0, 1),
+(5, 3, '{"sale_id":"6","payment_type":"Received Payment","payment_amount":"1","is_received":1,"path":"insertPayment","updated_amount":25}', 0, '2016-04-05 12:40:53', 0, 1),
+(6, 3, '{"sale_id":"6","payment_type":"Received Payment","payment_amount":"1","is_received":1,"path":"addReceivedAmount","updated_amount":18}', 2, '2016-04-06 08:38:57', 2, 1),
+(7, 3, '{"sale_id":"7","payment_type":"Received Payment","payment_amount":"1","is_received":1,"path":"insertPayment","updated_amount":746}', 0, '2016-04-06 09:03:03', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -111,13 +99,7 @@ CREATE TABLE IF NOT EXISTS `ospos_customers` (
 INSERT INTO `ospos_customers` (`person_id`, `account_number`, `taxable`, `deleted`, `balance`) VALUES
 (2, NULL, 1, 0, 242),
 (4, NULL, 1, 0, 100),
-(5, NULL, 1, 0, 4010),
-(27, NULL, 1, 0, 0),
-(28, '1000', 1, 0, 0),
-(30, NULL, 0, 1, 0),
-(31, NULL, 0, 0, 0),
-(32, NULL, 0, 0, 0),
-(33, '10005', 1, 0, 0);
+(5, NULL, 1, 0, 5380);
 
 -- --------------------------------------------------------
 
@@ -419,19 +401,14 @@ CREATE TABLE IF NOT EXISTS `ospos_module_web_hooks` (
   `module_web_hooks_url` varchar(255) NOT NULL,
   `module_is_secure` tinyint(4) NOT NULL,
   `status` tinyint(4) NOT NULL DEFAULT '1'
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `ospos_module_web_hooks`
 --
 
 INSERT INTO `ospos_module_web_hooks` (`module_hook_id`, `module_name`, `callout_event`, `module_web_hooks_url`, `module_is_secure`, `status`) VALUES
-(1, 'sales', 'create', 'localhost/abc', 0, 1),
-(2, 'config', 'create', 'localhost/abced', 0, 1),
-(3, 'employees', 'create', 'localhost/abc', 1, 0),
-(4, 'web_hooks', 'create', 'localhost/abc', 0, 0),
-(5, 'config', 'create', 'localhost/abc', 0, 1),
-(6, 'config', 'create', 'localhost/abc', 1, 0);
+(1, 'sales', 'create', 'localhost/abc', 0, 1);
 
 -- --------------------------------------------------------
 
@@ -452,7 +429,7 @@ CREATE TABLE IF NOT EXISTS `ospos_people` (
   `country` varchar(255) NOT NULL,
   `comments` text NOT NULL,
   `person_id` int(10) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `ospos_people`
@@ -463,13 +440,7 @@ INSERT INTO `ospos_people` (`first_name`, `last_name`, `phone_number`, `email`, 
 ('Mr', 'Customer1', '', '', '', '', '', '', '', '', '', 2),
 ('iOS', 'Supplier', '', '', '', '', '', '', '', '', '', 3),
 ('Miss', 'Customer2', '', '', '', '', '', '', '', '', '', 4),
-('test', 'customer', '', '', '', '', '', '', '', '', '', 5),
-('zaheer', 'ahmad', '', '', '', '', '', '', '', '', '', 27),
-('Fawad', 'Aslam', '923009894706', 'fawad@gmail.com', 'address1', 'address2', 'lhr', 'pu', '12345', 'pak', 'Comments', 28),
-('Mohsin', 'last_name', 'phone_number', 'email', 'address_1', 'address_2', 'city', 'state', 'zip', 'country', 'comments', 30),
-('Mohsin', 'last_name', 'phone_number', 'email', 'address_1', 'address_2', 'city', 'state', 'zip', 'country', 'comments', 31),
-('first_name', 'last_name', 'phone_number', 'email', 'address_1', 'address_2', 'city', 'state', 'zip', 'country', 'comments', 32),
-('curl', 'customer', '923009894706', 'curl@gmail.com', 'address1', 'address2', 'lhr', 'pu', '12345', 'pak', 'ccc', 33);
+('test', 'customer', '', '', '', '', '', '', '', '', '', 5);
 
 -- --------------------------------------------------------
 
@@ -595,7 +566,7 @@ INSERT INTO `ospos_sales` (`sale_time`, `customer_id`, `employee_id`, `comment`,
 ('2016-03-21 12:37:47', 4, 1, '0', NULL, 14, 'Cash: $50.00<br />Check: $50.00<br />Sales Credit: $50.00<br />', 50),
 ('2016-03-21 12:38:33', 4, 1, '0', NULL, 15, 'Check: $550.00<br />', 0),
 ('2016-03-21 12:40:18', 4, 1, '0', NULL, 16, 'Cash: $350.00<br />Sales Credit: $100.00<br />', 50),
-('2016-03-21 19:00:00', 5, 1, 'testing', '2009', 17, 'Cash: $150.00<br />', 4010);
+('2016-03-21 19:00:00', 5, 1, 'testing', '2009', 17, 'Cash: $150.00<br />', 4000);
 
 -- --------------------------------------------------------
 
@@ -668,7 +639,7 @@ CREATE TABLE IF NOT EXISTS `ospos_sales_payments` (
 
 INSERT INTO `ospos_sales_payments` (`sale_id`, `payment_type`, `payment_amount`, `is_received`) VALUES
 (6, 'Cash', '880.00', NULL),
-(6, 'Received Payment', '37.00', NULL),
+(6, 'Received Payment', '31.00', NULL),
 (6, 'Sales Credit', '400.00', NULL),
 (7, 'Cash', '250.00', NULL),
 (7, 'Check', '50.00', NULL),
@@ -702,7 +673,7 @@ INSERT INTO `ospos_sales_payments` (`sale_id`, `payment_type`, `payment_amount`,
 (16, 'Received Payment', '150.00', 1),
 (16, 'Sales Credit', '100.00', 0),
 (17, 'Cash', '150.00', 1),
-(17, 'Received Payment', '4010.00', 1);
+(17, 'Received Payment', '4000.00', 1);
 
 -- --------------------------------------------------------
 
@@ -793,6 +764,7 @@ INSERT INTO `ospos_sessions` (`session_id`, `ip_address`, `user_agent`, `last_ac
 ('09e796680e949968a36b58c24c8044ce', '::1', 'Mozilla/5.0 (Windows NT 6.1; rv:45.0) Gecko/20100101 Firefox/45.0', 1460056448, ''),
 ('0afab649038ae16cad13a70d90449f44', '::1', 'Mozilla/5.0 (Windows NT 6.1; rv:45.0) Gecko/20100101 Firefox/45.0', 1460056448, ''),
 ('0cab7c5145b800af2cea0ce8cb72c7aa', '::1', 'Mozilla/5.0 (Windows NT 6.1; rv:45.0) Gecko/20100101 Firefox/45.0', 1460056276, ''),
+('0e79b55ddd51379c5b3f791449589d22', '::1', 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.110 Safari/537.36', 1459964336, ''),
 ('0e7d741695260d472cb9b2a4bf5ec303', '::1', 'Mozilla/5.0 (Windows NT 6.1; rv:45.0) Gecko/20100101 Firefox/45.0', 1460056273, ''),
 ('1082a1f49a0ce740cacb76deaf84fb9c', '::1', 'Mozilla/5.0 (Windows NT 6.1; rv:45.0) Gecko/20100101 Firefox/45.0', 1460056276, ''),
 ('13b62257633f504ae073857c5e3978ec', '::1', 'Mozilla/5.0 (Windows NT 6.1; rv:45.0) Gecko/20100101 Firefox/45.0', 1460056276, ''),
@@ -806,19 +778,17 @@ INSERT INTO `ospos_sessions` (`session_id`, `ip_address`, `user_agent`, `last_ac
 ('22802663e3aa23fb5b01749a846d38c9', '::1', 'Mozilla/5.0 (Windows NT 6.1; rv:44.0) Gecko/20100101 Firefox/44.0', 1459005174, ''),
 ('26e6e6247203e1855b5a16c3293b0529', '::1', 'Mozilla/5.0 (Windows NT 6.1; rv:44.0) Gecko/20100101 Firefox/44.0', 1459006920, ''),
 ('270630bd475643650a42f03ed665f4ec', '::1', '0', 1459892453, ''),
-('2db8a1ab723aa1db4b910ad758b44808', '::1', 'Mozilla/5.0 (Windows NT 6.1; rv:45.0) Gecko/20100101 Firefox/45.0', 1461442357, ''),
 ('2eb21ebbd69f4293050c33143178c760', '::1', 'Mozilla/5.0 (Windows NT 6.1; rv:44.0) Gecko/20100101 Firefox/44.0', 1459005174, ''),
 ('2ee26562adb24f2bee2af30f9926f88b', '::1', 'Mozilla/5.0 (Windows NT 6.1; rv:44.0) Gecko/20100101 Firefox/44.0', 1458738482, 'a:8:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";s:4:"cart";a:0:{}s:9:"sale_mode";s:4:"sale";s:13:"sale_location";s:1:"1";s:8:"customer";i:-1;s:8:"payments";a:0:{}s:20:"sales_invoice_number";s:1:"2";}'),
 ('32f0d899cd0dbca0faa88e818c64d3ae', '::1', 'Mozilla/5.0 (Windows NT 6.1; rv:44.0) Gecko/20100101 Firefox/44.0', 1459008372, ''),
-('331e212cb2f01a8797d745e88a75a960', '::1', 'Mozilla/5.0 (Windows NT 6.1; rv:45.0) Gecko/20100101 Firefox/45.0', 1461478830, 'a:2:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";}'),
 ('365262ef3e10a11531a2a31f853223c6', '::1', 'Mozilla/5.0 (Windows NT 6.1; rv:44.0) Gecko/20100101 Firefox/44.0', 1459008372, ''),
 ('36e273eb67daf5507b4160b71856a2c3', '::1', 'Mozilla/5.0 (Windows NT 6.1; rv:45.0) Gecko/20100101 Firefox/45.0', 1460056273, ''),
 ('37c273384500aa1f2da17cfe185bebaa', '::1', 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.110 Safari/537.36', 1459891431, ''),
 ('3ab80c4916e3c5d2094a138cc42397f8', '::1', 'Mozilla/5.0 (Windows NT 6.1; rv:44.0) Gecko/20100101 Firefox/44.0', 1458412261, 'a:2:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";}'),
+('3cda708b827536099111f1daff0e3f2c', '::1', 'Mozilla/5.0 (Windows NT 6.1; rv:45.0) Gecko/20100101 Firefox/45.0', 1460892526, 'a:11:{s:9:"person_id";s:1:"1";s:8:"cartRecv";a:0:{}s:9:"recv_mode";s:7:"receive";s:8:"supplier";i:-1;s:19:"recv_invoice_number";s:1:"0";s:4:"cart";a:0:{}s:9:"sale_mode";s:4:"sale";s:13:"sale_location";s:1:"1";s:8:"customer";i:-1;s:8:"payments";a:0:{}s:20:"sales_invoice_number";s:1:"1";}'),
 ('3e7455bed5a9f587bcebca206537a962', '::1', 'Mozilla/5.0 (Windows NT 6.1; rv:44.0) Gecko/20100101 Firefox/44.0', 1459006920, ''),
 ('3e9f0780b625f611eb4e56183c51b2e1', '::1', 'Mozilla/5.0 (Windows NT 6.1; rv:44.0) Gecko/20100101 Firefox/44.0', 1459005175, ''),
 ('474c429d2b2c5c832af0fe13a5bf2759', '::1', 'Mozilla/5.0 (Windows NT 6.1; rv:45.0) Gecko/20100101 Firefox/45.0', 1460056275, ''),
-('4a03885843ec84bf1264b4fa09d7e76f', '::1', 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.112 Safari/537.36', 1461267993, 'a:2:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";}'),
 ('4dbf5c4bfeddc03e676964d8db91d2ed', '::1', 'Mozilla/5.0 (Windows NT 6.1; rv:44.0) Gecko/20100101 Firefox/44.0', 1459008327, ''),
 ('4fac7448d343b52e0490b6ca46782e63', '::1', 'Mozilla/5.0 (Windows NT 6.1; rv:45.0) Gecko/20100101 Firefox/45.0', 1460056272, ''),
 ('5465079823515d57818e846391b41e22', '::1', 'Mozilla/5.0 (Windows NT 6.1; rv:45.0) Gecko/20100101 Firefox/45.0', 1460056276, ''),
@@ -829,9 +799,7 @@ INSERT INTO `ospos_sessions` (`session_id`, `ip_address`, `user_agent`, `last_ac
 ('6728487d36bd6d20191c9420ac823f63', '::1', '0', 1459892328, ''),
 ('68fe201c459c9a3260cfae014f6be205', '::1', 'Mozilla/5.0 (Windows NT 6.1; rv:45.0) Gecko/20100101 Firefox/45.0', 1459889028, 'a:8:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";s:4:"cart";a:0:{}s:9:"sale_mode";s:4:"sale";s:13:"sale_location";s:1:"1";s:8:"customer";i:-1;s:8:"payments";a:0:{}s:20:"sales_invoice_number";s:1:"1";}'),
 ('6a6ada61d608f039e3c9404e23f7a2d2', '::1', 'Mozilla/5.0 (Windows NT 6.1; rv:44.0) Gecko/20100101 Firefox/44.0', 1459005174, ''),
-('6e1bf5a76aa2c15610faedb1e31629eb', '::1', 'Mozilla/5.0 (Windows NT 6.1; rv:45.0) Gecko/20100101 Firefox/45.0', 1461181093, 'a:11:{s:9:"person_id";s:1:"1";s:8:"cartRecv";a:0:{}s:9:"recv_mode";s:7:"receive";s:8:"supplier";i:-1;s:19:"recv_invoice_number";s:1:"0";s:4:"cart";a:0:{}s:9:"sale_mode";s:4:"sale";s:13:"sale_location";s:1:"1";s:8:"customer";i:-1;s:8:"payments";a:0:{}s:20:"sales_invoice_number";s:1:"1";}'),
 ('70a0d46d3f0e85b9a523c80adff36c24', '::1', 'Mozilla/5.0 (Windows NT 6.1; rv:45.0) Gecko/20100101 Firefox/45.0', 1460056448, ''),
-('7345d38bd78320ef28755b30ca96fc56', '::1', 'Mozilla/5.0 (Windows NT 6.1; rv:45.0) Gecko/20100101 Firefox/45.0', 1461441226, ''),
 ('7364a4ba35b87536bff7556a86f3171a', '::1', 'Mozilla/5.0 (Windows NT 6.1; rv:44.0) Gecko/20100101 Firefox/44.0', 1459005174, ''),
 ('7a4a7e9b111a7b99f99f07a8ba072738', '::1', 'Mozilla/5.0 (Windows NT 6.1; rv:44.0) Gecko/20100101 Firefox/44.0', 1459008327, ''),
 ('7af67218f4b2d2b677deaea7256cc03f', '::1', 'Mozilla/5.0 (Windows NT 6.1; rv:44.0) Gecko/20100101 Firefox/44.0', 1458741359, 'a:11:{s:9:"person_id";s:1:"1";s:4:"cart";a:0:{}s:9:"sale_mode";s:4:"sale";s:13:"sale_location";s:1:"1";s:8:"customer";i:-1;s:8:"payments";a:0:{}s:20:"sales_invoice_number";s:1:"2";s:8:"cartRecv";a:0:{}s:9:"recv_mode";s:7:"receive";s:8:"supplier";i:-1;s:19:"recv_invoice_number";s:1:"0";}'),
@@ -839,11 +807,9 @@ INSERT INTO `ospos_sessions` (`session_id`, `ip_address`, `user_agent`, `last_ac
 ('8ef99355e09555cc9bbf04345024143c', '::1', 'Mozilla/5.0 (Windows NT 6.1; rv:44.0) Gecko/20100101 Firefox/44.0', 1459008327, ''),
 ('936a7f1277cd0a56791108119204722e', '::1', 'Mozilla/5.0 (Windows NT 6.1; rv:44.0) Gecko/20100101 Firefox/44.0', 1459006920, ''),
 ('93952c5d4b725a86d28ab55c73cebbcc', '::1', 'Mozilla/5.0 (Windows NT 6.1; rv:44.0) Gecko/20100101 Firefox/44.0', 1458411206, 'a:11:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";s:13:"item_location";s:1:"1";s:9:"recv_mode";s:7:"receive";s:17:"recv_stock_source";s:1:"1";s:13:"sale_location";s:1:"1";s:4:"cart";a:1:{i:1;a:14:{s:7:"item_id";s:1:"1";s:13:"item_location";s:1:"1";s:10:"stock_name";s:5:"stock";s:4:"line";i:1;s:4:"name";s:7:"iphone6";s:11:"item_number";N;s:11:"description";s:0:"";s:12:"serialnumber";s:0:"";s:21:"allow_alt_description";s:1:"0";s:13:"is_serialized";s:1:"0";s:8:"quantity";i:11;s:8:"discount";i:0;s:8:"in_stock";s:1:"8";s:5:"price";s:6:"450.00";}}s:9:"sale_mode";s:4:"sale";s:8:"customer";i:-1;s:8:"payments";a:0:{}s:20:"sales_invoice_number";s:1:"0";}'),
-('94b54fdf090f51e72f3affa11967a8f9', '::1', 'Mozilla/5.0 (Windows NT 6.1; rv:45.0) Gecko/20100101 Firefox/45.0', 1461270798, 'a:2:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";}'),
 ('94ce228cf49ab0855dcaf952372facf4', '::1', 'Mozilla/5.0 (Windows NT 6.1; rv:45.0) Gecko/20100101 Firefox/45.0', 1460056276, ''),
 ('95b79c8da2488a14cdee46660c2946a8', '::1', 'Mozilla/5.0 (Windows NT 6.1; rv:45.0) Gecko/20100101 Firefox/45.0', 1460056276, ''),
 ('95d3e2b0968f80327b66403dff566337', '::1', 'Mozilla/5.0 (Windows NT 6.1; rv:44.0) Gecko/20100101 Firefox/44.0', 1459005174, ''),
-('9662c4b07a1fe0fe2e974c2144e60552', '::1', 'Mozilla/5.0 (Windows NT 6.1; rv:45.0) Gecko/20100101 Firefox/45.0', 1461520449, 'a:6:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";s:8:"cartRecv";a:0:{}s:9:"recv_mode";s:7:"receive";s:8:"supplier";i:-1;s:19:"recv_invoice_number";s:1:"0";}'),
 ('9663511b0909e93d805a94c369f27125', '::1', 'Mozilla/5.0 (Windows NT 6.1; rv:44.0) Gecko/20100101 Firefox/44.0', 1459006920, ''),
 ('9fb8158836fdadd48482e03296042d47', '::1', '0', 1459892234, ''),
 ('9fbc68d1d87195c1a9e1250d762fb16e', '::1', 'Mozilla/5.0 (Windows NT 6.1; rv:44.0) Gecko/20100101 Firefox/44.0', 1459006920, ''),
@@ -875,9 +841,7 @@ INSERT INTO `ospos_sessions` (`session_id`, `ip_address`, `user_agent`, `last_ac
 ('d4b95566afc94f84bfe0c9ec5befd1b6', '::1', 'Mozilla/5.0 (Windows NT 6.1; rv:44.0) Gecko/20100101 Firefox/44.0', 1459005174, ''),
 ('d7963fa732662aa504f8c7d18ad0f42d', '::1', 'Mozilla/5.0 (Windows NT 6.1; rv:44.0) Gecko/20100101 Firefox/44.0', 1458412835, 'a:1:{s:9:"person_id";s:1:"1";}'),
 ('d844d8611191f15c366f2207d443d09e', '::1', 'Mozilla/5.0 (Windows NT 6.1; rv:44.0) Gecko/20100101 Firefox/44.0', 1458406594, 'a:6:{s:9:"person_id";s:1:"1";s:8:"cartRecv";a:0:{}s:9:"recv_mode";s:7:"receive";s:8:"supplier";i:-1;s:19:"recv_invoice_number";s:1:"0";s:13:"item_location";s:1:"1";}'),
-('dc67393aa1eb2c0385dcff77bc9c85c4', '::1', 'Mozilla/5.0 (Windows NT 6.1; rv:45.0) Gecko/20100101 Firefox/45.0', 1461428157, ''),
 ('dedea33ef39ae165744f3ed8b7867da9', '::1', 'Mozilla/5.0 (Windows NT 6.1; rv:44.0) Gecko/20100101 Firefox/44.0', 1459009323, 'a:6:{s:9:"user_data";s:0:"";s:9:"person_id";s:1:"1";s:8:"cartRecv";a:0:{}s:9:"recv_mode";s:7:"receive";s:8:"supplier";i:-1;s:19:"recv_invoice_number";s:1:"0";}'),
-('df5fc95fc9ce6bd5beaf888868b4eb7a', '::1', 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.110 Safari/537.36', 1461497169, ''),
 ('e1c4508e4f0c4368a705cc577fb6968d', '::1', 'Mozilla/5.0 (Windows NT 6.1; rv:45.0) Gecko/20100101 Firefox/45.0', 1460056276, ''),
 ('e2f0c104d1f50027fad294a00cdb2199', '::1', 'Mozilla/5.0 (Windows NT 6.1; rv:44.0) Gecko/20100101 Firefox/44.0', 1459005174, ''),
 ('e61698b7da7fc8a602e425e7c8474772', '::1', 'Mozilla/5.0 (Windows NT 6.1; rv:44.0) Gecko/20100101 Firefox/44.0', 1459005174, ''),
@@ -937,27 +901,6 @@ INSERT INTO `ospos_suppliers` (`person_id`, `company_name`, `account_number`, `d
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ospos_tbl_keys`
---
-
-CREATE TABLE IF NOT EXISTS `ospos_tbl_keys` (
-  `key_id` int(11) NOT NULL,
-  `hash_code` varchar(255) NOT NULL,
-  `status` tinyint(4) NOT NULL DEFAULT '1'
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `ospos_tbl_keys`
---
-
-INSERT INTO `ospos_tbl_keys` (`key_id`, `hash_code`, `status`) VALUES
-(1, '123456789', 1),
-(2, '412a7a42f94505932a4c75e852880225', 0),
-(3, '511e3207e560cbc1bcc0acdd0f2f985f', 1);
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `ospos_tbl_logs`
 --
 
@@ -969,7 +912,7 @@ CREATE TABLE IF NOT EXISTS `ospos_tbl_logs` (
   `employee_id` int(11) NOT NULL,
   `comment` varchar(255) NOT NULL,
   `status` tinyint(4) NOT NULL DEFAULT '1'
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `ospos_tbl_logs`
@@ -980,18 +923,11 @@ INSERT INTO `ospos_tbl_logs` (`log_id`, `module_id`, `module_name`, `action_time
 (5, 18, 'Sales', '2016-03-23 04:35:38', 1, '', 1),
 (6, 6, 'Sales', '2016-04-05 11:29:47', 1, '', 1),
 (7, 6, 'Sales', '2016-04-05 11:38:19', 1, '', 1),
-(8, 7, 'Sales', '2016-04-06 09:03:04', 1, '', 1),
-(9, 17, 'Sales', '2016-04-19 06:14:15', 1, '', 1);
+(8, 7, 'Sales', '2016-04-06 09:03:04', 1, '', 1);
 
 --
 -- Indexes for dumped tables
 --
-
---
--- Indexes for table `keys`
---
-ALTER TABLE `keys`
-  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `ospos_app_config`
@@ -1174,12 +1110,6 @@ ALTER TABLE `ospos_suppliers`
   ADD UNIQUE KEY `account_number` (`account_number`), ADD KEY `person_id` (`person_id`);
 
 --
--- Indexes for table `ospos_tbl_keys`
---
-ALTER TABLE `ospos_tbl_keys`
-  ADD PRIMARY KEY (`key_id`);
-
---
 -- Indexes for table `ospos_tbl_logs`
 --
 ALTER TABLE `ospos_tbl_logs`
@@ -1190,15 +1120,10 @@ ALTER TABLE `ospos_tbl_logs`
 --
 
 --
--- AUTO_INCREMENT for table `keys`
---
-ALTER TABLE `keys`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
---
 -- AUTO_INCREMENT for table `ospos_curl_log`
 --
 ALTER TABLE `ospos_curl_log`
-  MODIFY `curl_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=83;
+  MODIFY `curl_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT for table `ospos_giftcards`
 --
@@ -1228,12 +1153,12 @@ ALTER TABLE `ospos_item_kits`
 -- AUTO_INCREMENT for table `ospos_module_web_hooks`
 --
 ALTER TABLE `ospos_module_web_hooks`
-  MODIFY `module_hook_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
+  MODIFY `module_hook_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `ospos_people`
 --
 ALTER TABLE `ospos_people`
-  MODIFY `person_id` int(10) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=34;
+  MODIFY `person_id` int(10) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT for table `ospos_receivings`
 --
@@ -1255,15 +1180,10 @@ ALTER TABLE `ospos_sales_suspended`
 ALTER TABLE `ospos_stock_locations`
   MODIFY `location_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 --
--- AUTO_INCREMENT for table `ospos_tbl_keys`
---
-ALTER TABLE `ospos_tbl_keys`
-  MODIFY `key_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
---
 -- AUTO_INCREMENT for table `ospos_tbl_logs`
 --
 ALTER TABLE `ospos_tbl_logs`
-  MODIFY `log_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=10;
+  MODIFY `log_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
 --
 -- Constraints for dumped tables
 --

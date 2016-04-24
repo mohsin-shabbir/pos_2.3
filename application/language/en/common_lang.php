@@ -6,6 +6,24 @@ $lang['common_module_name'] = 'Module Name';
 $lang['common_action_time'] = 'Action Time';
 $lang['common_employee_id'] = 'Employee Id';
 $lang['common_comment'] = 'Comment';
+$lang['view_main_web_hooks'] = 'View Main Web Hooks';
+$lang['view_main_web_hooks_keys'] = 'View Sender Keys Web Hooks';
+$lang['view_module_web_hooks'] = 'View Module Web Hooks';
+$lang['common_global_id'] = 'Conf Id';
+$lang['common_callout'] = 'Callout';
+
+$lang['common_key_id'] = 'Key Id';
+$lang['common_hash_code'] = 'Hash Code';
+$lang['common_url'] = 'URL';
+$lang['common_error_email'] = 'Error Email';
+$lang['common_is_secure'] = 'Secure';
+
+$lang['common_module_hook_id'] = 'Hook Id';
+$lang['common_module_name'] = 'Module Name';
+$lang['common_callout_event'] = 'Event';
+$lang['common_module_web_hooks_url'] = 'URL';
+$lang['common_module_is_secure'] = 'Secure';
+
 
 $lang['common_common'] = 'common';
 $lang['common_submit'] = 'Submit';

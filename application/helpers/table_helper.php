@@ -25,6 +25,67 @@ function get_people_manage_table($people,$controller)
 	$table.='</tbody></table>';
 	return $table;
 }
+/*
+Gets the html data rows for the people.
+*/
+function get_people_manage_table_data_rows($people,$controller)
+{
+	//print_r($people);
+	$CI =& get_instance();
+	$table_data_rows='';
+	
+	foreach($people->result() as $person)
+	{
+		$table_data_rows.=get_person_data_row($person,$controller);
+	}
+	
+	if($people->num_rows()==0)
+	{
+		$table_data_rows.="<tr><td colspan='6'><div class='warning_message' style='padding:7px;'>".$CI->lang->line('common_no_persons_to_display')."</div></td></tr>";
+	}
+	
+	return $table_data_rows;
+}
+
+function get_person_data_row($person,$controller)
+{
+	$CI =& get_instance();
+	$controller_name=strtolower(get_class($CI));
+	$width = $controller->get_form_width();
+	if(isset($person->balance))
+	{ 
+		$blnc = character_limiter($person->balance,13); 
+	}
+	else
+	{
+		$blnc = 0;
+	}
+	$table_data_row='<tr>';
+	$table_data_row.="<td width='5%'><input type='checkbox' id='person_$person->person_id' value='".$person->person_id."'/></td>";
+	$table_data_row.='<td width="15%">'.character_limiter($person->last_name,13).'</td>';
+	$table_data_row.='<td width="15%">'.character_limiter($person->first_name,13).'</td>';
+	$table_data_row.='<td width="30%">'.mailto($person->email,character_limiter($person->email,22)).'</td>';
+	$table_data_row.='<td width="15%">'.character_limiter($person->phone_number,13).'</td>';
+	$table_data_row.='<td width="15%">'.$blnc.'</td>';		
+	$table_data_row.='<td width="5%">'.anchor($controller_name."/view/$person->person_id/width:$width", $CI->lang->line('common_edit'),array('class'=>'thickbox','title'=>$CI->lang->line($controller_name.'_update'))).'</td>';		
+	$table_data_row.='</tr>';
+	
+	return $table_data_row;
+}
+
+function get_detailed_data_row($row, $controller)
+{
+	$table_data_row='<tr>';
+	$table_data_row.='<td><a href="#" class="expand">+</a></td>';
+	foreach($row as $cell)
+	{
+		$table_data_row.='<td>';
+		$table_data_row.=$cell;
+		$table_data_row.='</td>';
+	}
+	$table_data_row.='</tr>';
+	return $table_data_row;
+}
 
 /////////log table
 function get_log_manage_table($people,$controller)
@@ -93,62 +154,196 @@ function get_log_data_row($person,$controller)
 	return $table_data_row;
 }
 
-
-
-/*
-Gets the html data rows for the people.
-*/
-function get_people_manage_table_data_rows($people,$controller)
+//////////////////////////////////////////////////////Get Main Configuration///////////////////////////////////////////
+function get_main_web_hooks_table($people,$controller)
+{
+	$CI =& get_instance();
+	$table='<table class="tablesorter" id="sortable_table">';
+	
+	$headers = array(
+	$CI->lang->line('common_global_id'),
+	$CI->lang->line('common_callout'),
+	$CI->lang->line('common_url'),
+	$CI->lang->line('common_error_email'),
+	$CI->lang->line('common_is_secure')
+	//$CI->lang->line('common_comment'),//
+	//'&nbsp'
+	);
+	
+	$table.='<thead><tr>';
+	foreach($headers as $header)
+	{
+		$table.="<th>$header</th>";
+	}
+	$table.='</tr></thead><tbody>';
+	$table.=get_main_hooks_manage_table_data_rows($people,$controller);
+	$table.='</tbody></table>';
+	return $table;
+}
+function get_main_hooks_manage_table_data_rows($people,$controller)
 {
 	//print_r($people);
 	$CI =& get_instance();
 	$table_data_rows='';
-	
 	foreach($people->result() as $person)
 	{
-		$table_data_rows.=get_person_data_row($person,$controller);
+		$table_data_rows.= get_main_web_hooks_data_row($person,$controller);
 	}
 	
 	if($people->num_rows()==0)
 	{
-		$table_data_rows.="<tr><td colspan='6'><div class='warning_message' style='padding:7px;'>".$CI->lang->line('common_no_persons_to_display')."</div></td></tr>";
+		$table_data_rows.="<tr><td colspan='6'><div class='warning_message' style='padding:7px;'>".$CI->lang->line('common_no_log_to_display')."</div></td></tr>";
 	}
 	
 	return $table_data_rows;
 }
 
-function get_person_data_row($person,$controller)
+function get_main_web_hooks_data_row($person,$controller)
 {
+	
 	$CI =& get_instance();
 	$controller_name=strtolower(get_class($CI));
 	$width = $controller->get_form_width();
-
 	$table_data_row='<tr>';
-	$table_data_row.="<td width='5%'><input type='checkbox' id='person_$person->person_id' value='".$person->person_id."'/></td>";
-	$table_data_row.='<td width="15%">'.character_limiter($person->last_name,13).'</td>';
-	$table_data_row.='<td width="15%">'.character_limiter($person->first_name,13).'</td>';
-	$table_data_row.='<td width="30%">'.mailto($person->email,character_limiter($person->email,22)).'</td>';
-	$table_data_row.='<td width="15%">'.character_limiter($person->phone_number,13).'</td>';
-	$table_data_row.='<td width="15%">'.character_limiter($person->balance,13).'</td>';		
-	$table_data_row.='<td width="5%">'.anchor($controller_name."/view/$person->person_id/width:$width", $CI->lang->line('common_edit'),array('class'=>'thickbox','title'=>$CI->lang->line($controller_name.'_update'))).'</td>';		
+	///$table_data_row.="<td width='5%'><input type='checkbox' id='person_$person->person_id' value='".$person->person_id."'/></td>";
+	$table_data_row.='<td width="10%">'.character_limiter($person->global_id,13).'</td>';
+	$table_data_row.='<td width="10%">'.character_limiter($person->callout,13).'</td>';
+	$table_data_row.='<td width="40%">'.character_limiter($person->url,13).'</td>';
+	//$table_data_row.='<td width="30%">'.date("d,m,Y" , time(character_limiter($person->action_time,13))).'</td>';
+	$table_data_row.='<td width="30%">'.character_limiter($person->error_email,13).'</td>';
+	$table_data_row.='<td width="10%">'.character_limiter($person->is_secure,13).'</td>';
 	$table_data_row.='</tr>';
 	
 	return $table_data_row;
 }
 
-function get_detailed_data_row($row, $controller)
+//////////////////////////////////////////////////////Get Main Configuration///////////////////////////////////////////
+
+
+//////////////////////////////////////////////////////Get module hooks Configuration///////////////////////////////////////////
+function get_module_web_hooks_table($people,$controller)
 {
-	$table_data_row='<tr>';
-	$table_data_row.='<td><a href="#" class="expand">+</a></td>';
-	foreach($row as $cell)
+	$CI =& get_instance();
+	$table='<table class="tablesorter" id="sortable_table">';
+	
+	$headers = array(	
+	'<input type="checkbox" id="select_all" />', 
+	$CI->lang->line('common_module_hook_id'),
+	$CI->lang->line('common_module_name'),
+	$CI->lang->line('common_callout_event'),
+	$CI->lang->line('common_module_web_hooks_url'),
+	$CI->lang->line('common_module_is_secure'),
+	'&nbsp'
+	);
+	
+	$table.='<thead><tr>';
+	foreach($headers as $header)
 	{
-		$table_data_row.='<td>';
-		$table_data_row.=$cell;
-		$table_data_row.='</td>';
+		$table.="<th>$header</th>";
 	}
+	$table.='</tr></thead><tbody>';
+	$table.=get_module_hooks_manage_table_data_rows($people,$controller);
+	$table.='</tbody></table>';
+	return $table;
+}
+function get_module_hooks_manage_table_data_rows($people,$controller)
+{
+	//print_r($people);
+	$CI =& get_instance();
+	$table_data_rows='';
+	foreach($people->result() as $person)
+	{
+		$table_data_rows.= get_module_web_hooks_data_row($person,$controller);
+	}
+	
+	if($people->num_rows()==0)
+	{
+		$table_data_rows.="<tr><td colspan='7'><div class='warning_message' style='padding:7px;'>".$CI->lang->line('common_no_log_to_display')."</div></td></tr>";
+	}
+	
+	return $table_data_rows;
+}
+
+function get_module_web_hooks_data_row($person,$controller)
+{
+	
+	$CI =& get_instance();
+	$controller_name=strtolower(get_class($CI));
+	$width = $controller->get_form_width();
+	$table_data_row='<tr>';
+	$table_data_row.="<td width='5%'><input type='checkbox' id='person_$person->module_hook_id' value='".$person->module_hook_id."'/></td>";
+	///$table_data_row.="<td width='5%'><input type='checkbox' id='person_$person->person_id' value='".$person->person_id."'/></td>";
+	$table_data_row.='<td width="10%">'.character_limiter($person->module_hook_id,13).'</td>';
+	$table_data_row.='<td width="15%">'.character_limiter($person->module_name,13).'</td>';
+	$table_data_row.='<td width="25%">'.character_limiter($person->callout_event,13).'</td>';
+	//$table_data_row.='<td width="30%">'.date("d,m,Y" , time(character_limiter($person->action_time,13))).'</td>';
+	$table_data_row.='<td width="33%">'.character_limiter($person->module_web_hooks_url,13).'</td>';
+	$table_data_row.='<td width="7%">'.character_limiter($person->module_is_secure,13).'</td>';
+	$table_data_row.='<td width="5%">'.anchor($controller_name."/view/$person->module_hook_id/width:$width", $CI->lang->line('common_edit'),array('class'=>'thickbox','title'=>$CI->lang->line($controller_name.'_update'))).'</td>';	
 	$table_data_row.='</tr>';
+	
 	return $table_data_row;
 }
+
+//////////////////////////////////////////////////////Get module hooks Configuration///////////////////////////////////////////
+
+//////////////////////////////////////////////////////Get module hooks Keys///////////////////////////////////////////
+function get_module_web_hooks_keys_table($people,$controller)
+{
+	$CI =& get_instance();
+	$table='<table class="tablesorter" id="sortable_table">';
+	
+	$headers = array(	
+	'<input type="checkbox" id="select_all" />', 
+	$CI->lang->line('common_key_id'),
+	$CI->lang->line('common_hash_code')
+	//,'&nbsp'
+	);
+	
+	$table.='<thead><tr>';
+	foreach($headers as $header)
+	{
+		$table.="<th>$header</th>";
+	}
+	$table.='</tr></thead><tbody>';
+	$table.=get_module_hooks_manage_keys_table_data_rows($people,$controller);
+	$table.='</tbody></table>';
+	return $table;
+}
+function get_module_hooks_manage_keys_table_data_rows($people,$controller)
+{
+	//print_r($people);
+	$CI =& get_instance();
+	$table_data_rows='';
+	foreach($people->result() as $person)
+	{
+		$table_data_rows.= get_module_web_hooks_keys_data_row($person,$controller);
+	}
+	
+	if($people->num_rows()==0)
+	{
+		$table_data_rows.="<tr><td colspan='3'><div class='warning_message' style='padding:7px;'>".$CI->lang->line('common_no_log_to_display')."</div></td></tr>";
+	}
+	
+	return $table_data_rows;
+}
+
+function get_module_web_hooks_keys_data_row($person,$controller)
+{
+	$CI =& get_instance();
+	$controller_name=strtolower(get_class($CI));
+	$width = $controller->get_form_width();
+	$table_data_row='<tr>';
+	$table_data_row.="<td width='5%'><input type='checkbox' id='person_$person->key_id' value='".$person->key_id."'/></td>";
+	$table_data_row.='<td width="10%">'.character_limiter($person->key_id ,13).'</td>';
+	$table_data_row.='<td width="75%">'.character_limiter($person->hash_code ,13).'</td>';
+	//$table_data_row.='<td width="10%">'.anchor($controller_name."/view/$person->key_id/width:$width", $CI->lang->line('common_edit'),array('class'=>'thickbox','title'=>$CI->lang->line($controller_name.'_update'))).'</td>';	
+	$table_data_row.='</tr>';
+	
+	return $table_data_row;
+}
+
+//////////////////////////////////////////////////////Get module hooks Keys///////////////////////////////////////////
 
 /*
 Gets the html table to manage suppliers.

@@ -57,7 +57,7 @@ class Common_lib extends CI_Model
 		/********************************************/
 		//Curl Code Will Goes here
 		$query = $this->db->get_where('ospos_global_config', array('status' => '1') , 1);
-	/*	foreach ($query->result() as $row)
+		/*foreach ($query->result() as $row)
 		{
 			echo $row->title;
 		}*/
@@ -95,7 +95,7 @@ class Common_lib extends CI_Model
 				$curlResponse  = curl_exec($curl);
 				curl_close($curl);
 				unset($headers);				
-				if($curlResponse['status'] == 200)
+				if($curlResponse)///if($curlResponse['status'] == 200)
 				{
 					$data = array(
 					   'curl_status' => 1

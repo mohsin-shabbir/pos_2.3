@@ -1,12 +1,19 @@
 <?php
 $lang['web_hooks_info'] = 'Store Web Hooks Information';
+$lang['web_hooks_modules_info'] = 'Store Web Hooks Information';
+$lang['web_hooks_module_info'] = 'Store Modules Web Hooks Information';
 $lang['web_hooks_callout'] = 'Enable Callout';
 $lang['web_hooks_url'] = 'Receiver URL'; 
 $lang['web_hooks_error_email'] = 'Error Handling Email'; 
 $lang['web_hooks_authorization_token'] = 'Authorization Token'; 
 $lang['web_hooks_authorization_username'] = 'Authorization Username'; 
 $lang['web_hooks_authorization_password'] = 'Authorization Password'; 
-$lang['web_hooks_is_secure'] = 'Would you like to add security check.'; 
+$lang['web_hooks_is_secure'] = 'Security Implementation'; 
+$lang['module_name'] = 'Module Name'; 
+$lang['callout_event'] = 'Callout Event';
+$lang['module_web_hooks_url'] = 'Callout URL';
+$lang['module_web_hooks_is_secure'] = 'Security Implementation';
+$lang['module_web_hooks_submit'] = 'Create Keys';  
 
 $lang['config_info'] = 'Store Configuration Information';
 $lang['config_company'] = 'Company Name';

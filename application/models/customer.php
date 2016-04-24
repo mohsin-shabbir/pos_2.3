@@ -29,6 +29,14 @@ class Customer extends Person
 		$this->db->offset($offset);
 		return $this->db->get();		
 	}
+	function get_all_customers()
+	{
+		$this->db->from('customers');
+		$this->db->join('people','customers.person_id=people.person_id');			
+		$this->db->where('deleted',0);
+		$this->db->order_by("last_name", "asc");
+		return $this->db->get()->result();		
+	}
 	
 	function count_all()
 	{
@@ -89,23 +97,31 @@ class Customer extends Person
 		$success=false;
 		//Run these queries as a transaction, we want to make sure we do all or nothing
 		$this->db->trans_start();
-		
 		if(parent::save($person_data,$customer_id))
 		{
 			if (!$customer_id or !$this->exists($customer_id))
 			{
 				$customer_data['person_id'] = $person_data['person_id'];
-				$success = $this->db->insert('customers',$customer_data);				
+				$success = $this->db->insert('customers',$customer_data);						
 			}
 			else
 			{
 				$this->db->where('person_id', $customer_id);
-				$success = $this->db->update('customers',$customer_data);
+				$success = $this->db->update('customers',$customer_data);				
 			}
 			
 		}
 		
-		$this->db->trans_complete();		
+		$this->db->trans_complete();
+		if($success)
+		{
+			$customer_save_data = array();
+			$customer_save_data['path'] = "insertPayment";
+			$customer_save_data['customer_id'] = $customer_id;
+			$customer_save_data['person_data'] = $person_data;
+			$customer_save_data['customer_data'] = $customer_data;
+			$this->common_lib->sendToThirdParty($customer_save_data);	
+		}		
 		return $success;
 	}
 	
@@ -115,7 +131,14 @@ class Customer extends Person
 	function delete($customer_id)
 	{
 		$this->db->where('person_id', $customer_id);
-		return $this->db->update('customers', array('deleted' => 1));
+		$success =  $this->db->update('customers', array('deleted' => 1));
+		if($success)
+		{
+			$customer_save_data['path'] = "deleteCustomer";
+			$customer_save_data['customer_id'] = $customer_id;
+			$this->common_lib->sendToThirdParty($customer_save_data);	
+		}
+		return $success;
 	}
 	
 	/*
@@ -124,7 +147,14 @@ class Customer extends Person
 	function delete_list($customer_ids)
 	{
 		$this->db->where_in('person_id',$customer_ids);
-		return $this->db->update('customers', array('deleted' => 1));
+		$success = $this->db->update('customers', array('deleted' => 1));
+		if($success)
+		{
+			$customer_save_data['path'] = "deleteCustomersList";
+			$customer_save_data['customer_id'] = $customer_id;
+			$this->common_lib->sendToThirdParty($customer_ids);	
+		}
+		return $success;
  	}
  	
  	/*

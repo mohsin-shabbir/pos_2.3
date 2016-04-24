@@ -36,6 +36,16 @@ define('FOPEN_READ_WRITE_CREATE',				'a+b');
 define('FOPEN_WRITE_CREATE_STRICT',				'xb');
 define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 
+define('HTTP_NON_AUTHORITATIVE_INFORMATION' , '203');  ///authorization info required
+define('HTTP_UNAUTHORIZED' , '401');
+define('HTTP_NOT_ACCEPTABLE' , '40');
+define('HTTP_BAD_GATEWAY' , '502');
+define('HTTP_METHOD_NOT_ALLOWED' , '405');
+define('HTTP_NOT_FOUND' , '404');
+define('HTTP_OK' , '200');
+define('HTTP_BAD_REQUEST' , '400');
+define('HTTP_INTERNAL_SERVER_ERROR' , '500');
+
 /*
  | Precision for calculations performed on decimals 
  */
@@ -43,3 +53,5 @@ define("PRECISION", 3);
 
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */
+
+
