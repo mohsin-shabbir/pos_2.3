@@ -49,6 +49,10 @@ $route['reports/inventory_:any'] = "reports/excel_export";
 
 $route['reports/(detailed_sales)/(:any)/(:any)'] = "reports/$1/$2/$3";
 $route['reports/detailed_sales'] = "reports/date_input";
+
+$route['reports/(detailed_synchronizations)/(:any)/(:any)'] = "reports/$1/$2/$3";
+$route['reports/detailed_synchronizations'] = "reports/date_input";
+
 $route['reports/(detailed_receivings)/(:any)/(:any)'] = "reports/$1/$2/$3";
 $route['reports/detailed_receivings'] = "reports/date_input_recv";
 $route['reports/(specific_:any)/(:any)/(:any)/(:any)'] = "reports/$1/$2/$3/$4";

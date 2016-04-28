@@ -89,10 +89,12 @@ $lang['reports_all'] = 'All';
 $lang['reports_returns'] = 'Returns';
 $lang['reports_discount'] = 'Discounts';
 $lang['reports_sales'] = 'Sales';
+$lang["reports_pending_advance"] = "Pending/Advance";
 $lang['reports_requisitions'] = 'Requisitions';
 $lang['reports_receiving_id'] = 'Receiving ID';
 $lang['reports_stock_location'] = 'Stock location';
 $lang['reports_inventory'] = 'Inventory';
+$lang['reports_detailed_synchronizations_report'] = 'Detailed Synchronization Report';
+$lang['reports_synchronizations'] = 'Synchronization';
 
-$lang["reports_pending_advance"] = "Pending/Advance";
 ?>

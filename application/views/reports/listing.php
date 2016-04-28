@@ -34,11 +34,13 @@
 		<ul>
 		<?php 			
 			$person_id = $this->session->userdata('person_id');
+			show_report_if_allowed('detailed', 'synchronizations', $person_id);
 			show_report_if_allowed('detailed', 'sales', $person_id);
 			show_report_if_allowed('detailed', 'receivings', $person_id);
 			show_report_if_allowed('specific', 'customer', $person_id, 'reports_customers');
 			show_report_if_allowed('specific', 'discount', $person_id, 'reports_discounts');
 			show_report_if_allowed('specific', 'employee', $person_id, 'reports_employees');
+			
 		?>
 		</ul>
 	</li>

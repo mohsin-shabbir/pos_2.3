@@ -877,6 +877,110 @@ class Reports extends Secure_area
 		$this->load->view("reports/tabular_details",$data);
 	}
 	
+	function detailed_synchronizations($start_date, $end_date, $sale_type, $export_excel=0)
+	{
+		$this->load->model('reports/detailed_synchronizations');
+		$model = $this->detailed_synchronizations;
+		
+		$headers = $model->getDataColumns();
+		$report_data = $model->getData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type));
+		
+		$summary_data = array();
+		$details_data = array();
+		/*$serverString = json_encode($details_data);
+		$headers = array();
+		$headers[0] = 'Content-Type: application/json';
+		$curl = curl_init();
+		curl_setopt($curl, CURLOPT_URL, "");
+		curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+		curl_setopt($curl, CURLOPT_POST, 1);
+		curl_setopt($curl, CURLOPT_POSTFIELDS , $serverString); 
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+		$curlResponse  = curl_exec($curl);
+		curl_close($curl);
+		unset($headers);*/
+		$selectFA = mysql_query("SELECT * FROM 0_debtor_trans");
+		///$mysqlArray = json_encode(mysql_fetch_array($selectFA));
+		$jsonData = array();
+		while($mysqlArray = mysql_fetch_assoc($selectFA))
+		{
+			array_push($jsonData  , $mysqlArray);
+			
+		}
+		$jsonArray['transactionId'] = $jsonData;
+		
+		$json = json_encode($jsonArray);
+		
+		/*$json = '{
+					"transactionId":
+					[
+						{
+							"saleId":9,
+							"customerName":"Mohsin",
+							"customerOrder":3
+						},
+						{
+							"saleId":8,
+							"customerName":"Mohsin",
+							"customerOrder":3
+						},
+						{
+							"saleId":7,
+							"customerName":"Mohsin",
+							"customerOrder":3
+						},
+						{
+							"saleId":6,
+							"customerName":"Mohsin",
+							"customerOrder":3
+						}
+					]
+				}';*/
+			$array = json_decode($json);
+
+			$faArray = array();
+			$posArray = array();
+			foreach($array->transactionId as $key=>$row1)
+			{
+				array_push($faArray , $row1->trans_no);
+			}
+			foreach($report_data['summary'] as $key=>$row)
+			{
+				if(!in_array($row['sale_id'] , $faArray))
+				{
+					$summary_data[] = array(anchor('sales/edit/'.$row['sale_id'] . '/width:'.FORM_WIDTH, 'POS '.$row['sale_id'], array('class' => 'thickbox')), $row['sale_date'], $row['items_purchased'], $row['employee_name'], $row['customer_name'], to_currency($row['subtotal']), to_currency($row['total']), to_currency($row['tax']),to_currency($row['profit']), $row['payment_type'], $row['comment'], 'POS');
+					
+					foreach($report_data['details'][$key] as $drow)
+					{
+						$details_data[$key][] = array($drow['name'], $drow['category'], $drow['serialnumber'], $drow['description'], $drow['quantity_purchased'], to_currency($drow['subtotal']), to_currency($drow['total']), to_currency($drow['tax']),to_currency($drow['profit']), $drow['discount_percent'].'%');
+					}
+				}
+			array_push($posArray , $row['sale_id']);
+			
+		}
+		foreach($array->transactionId as $key=>$row1)
+			{
+				if(!in_array($row1->trans_no , $posArray))
+				{
+					$summary_data[] = array(' FA', $row1->tran_date, $row1->order_, '', '', '', $row1->ov_amount, $row1->ov_gst,'', $row1->payment_terms, $row1->reference, 'FA');
+				}
+			}
+		
+		$data = array(
+			"title" =>$this->lang->line('reports_detailed_sales_report'),
+			"subtitle" => date('m/d/Y', strtotime($start_date)) .'-'.date('m/d/Y', strtotime($end_date)),
+			"headers" => $model->getDataColumns(),
+			"editable" => "sales",	
+			"summary_data" => $summary_data,
+			"details_data" => $details_data,
+			"header_width" => intval(100 / count($headers['summary'])),	
+			"overall_summary_data" => $model->getSummaryData(array('start_date'=>$start_date, 'end_date'=>$end_date, 'sale_type' => $sale_type)),
+			"export_excel" => $export_excel
+		);
+
+		$this->load->view("reports/tabular_details",$data);
+	}
+	
 	function detailed_receivings($start_date, $end_date, $receiving_type, $export_excel=0)
 	{
 		$this->load->model('reports/Detailed_receivings');

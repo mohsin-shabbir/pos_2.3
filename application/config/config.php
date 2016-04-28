@@ -11,7 +11,7 @@
 */
 $config['application_version'] = '2.3.1';
 
-$config['rest_auth'] = 'basic3';
+$config['rest_auth'] = 'basic124';
 $methods = array("POST"); ///"GET",
 $config['supported_methods'] = $methods;
 
